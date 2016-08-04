@@ -1,10 +1,17 @@
-angular.module('app', ['ngResource', 'ngRoute']);
+var myApp = angular.module('app', ['ui.router']);
 
 
+myApp.config(function($stateProvider, $urlRouterProvider) {
 
-angular.module('app').config(function($routeProvider, $locationProvider) {
-	$locationProvider.html5Mode(true);
+	$urlRouterProvider.otherwise('/');
 
-	$routeProvider
-		.when('/', { templateUrl: '/main/main', controller: 'MainCtrl'})
+	$stateProvider
+    .state('dash', {
+      url: "/",
+      templateUrl: '/partials/main/main',
+      // template: "<h1>{{hello}}</h1>",
+      controller: "MainCtrl"
+    })
+
+
 });
