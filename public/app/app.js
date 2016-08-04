@@ -9,7 +9,6 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
     .state('dash', {
       url: "/",
       templateUrl: '/partials/main/main',
-      // template: "<h1>{{hello}}</h1>",
       controller: "MainCtrl"
     })
 
