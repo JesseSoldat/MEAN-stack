@@ -5,14 +5,12 @@ var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var app = express();
 
-var config = {
-	rootPath: __dirname
-}
+var config = require('./server/config/config')[env];
 
 require('./server/config/express')(app, config);
 
 //Mongoose
- mongoose.connect('mongodb://jesse:ichiban987@ds011933.mlab.com:11933/jlab_parse');
+ mongoose.connect(config.db);
   var db = mongoose.connection;
   db.on('error', console.error.bind(console, 'connection error...'));
   db.once('open', function callback() {
@@ -20,7 +18,6 @@ require('./server/config/express')(app, config);
   });
 
 var messageSchema = mongoose.Schema({message: String}); 
-
 var Message = mongoose.model('Message', messageSchema);
 
 var mongoMessage;
@@ -39,7 +36,5 @@ app.get('*', function(req, res) {
 	res.render('index', {mongoMessage: mongoMessage});
 });
 
-var port = 3000;
-
-app.listen(port);
-console.log('Listening on port '+port+'....');
+app.listen(config.port);
+console.log('Listening on port '+config.port+'....');
