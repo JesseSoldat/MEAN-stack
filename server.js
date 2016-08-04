@@ -9,32 +9,11 @@ var config = require('./server/config/config')[env];
 
 require('./server/config/express')(app, config);
 
-//Mongoose
- mongoose.connect(config.db);
-  var db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'connection error...'));
-  db.once('open', function callback() {
-    console.log('JLab db opened');
-  });
+require('./server/config/mongoose')(config);
 
-var messageSchema = mongoose.Schema({message: String}); 
-var Message = mongoose.model('Message', messageSchema);
+require('./server/config/routes')(app);
 
-var mongoMessage;
 
-Message.findOne({}).exec(function(err, messageDoc){
-	// Message.create({message: ' Hello from MongoLab'});
-	mongoMessage = messageDoc.message;
-	console.log(mongoMessage);
-});
-
-app.get('/partials/*', function(req, res) {
-    res.render('../../public/app/' + req.params[0], {mongoMessage: mongoMessage});
-  });
-
-app.get('*', function(req, res) {
-	res.render('index', {mongoMessage: mongoMessage});
-});
 
 app.listen(config.port);
 console.log('Listening on port '+config.port+'....');
