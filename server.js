@@ -1,30 +1,15 @@
 var express = require('express'),
-    bodyParser = require('body-parser'),
-	stylus = require('stylus')
 	mongoose = require('mongoose');
 
 var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 var app = express();
 
-function compile(str, path) {
-    return stylus(str).set('filename', path);
+var config = {
+	rootPath: __dirname
 }
 
-app.set('views', __dirname + '/server/views');
-app.set('view engine', 'jade');
-
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-
-app.use(stylus.middleware(
-{
-  src: __dirname + '/public',
-  compile: compile
-}
-));
-
-app.use(express.static(__dirname + '/public'));
+require('./server/config/express')(app, config);
 
 //Mongoose
  mongoose.connect('mongodb://jesse:ichiban987@ds011933.mlab.com:11933/jlab_parse');
@@ -47,7 +32,7 @@ Message.findOne({}).exec(function(err, messageDoc){
 });
 
 app.get('/partials/*', function(req, res) {
-    res.render('../../public/app/' + req.params[0]);
+    res.render('../../public/app/' + req.params[0], {mongoMessage: mongoMessage});
   });
 
 app.get('*', function(req, res) {
