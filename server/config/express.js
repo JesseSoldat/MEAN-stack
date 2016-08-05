@@ -1,5 +1,8 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
+     cookieParser = require('cookie-parser'),
+    passport = require('passport'),
+    session = require('express-session'),
     stylus = require('stylus');
 
 module.exports = function(app, config){
@@ -10,10 +13,12 @@ module.exports = function(app, config){
 
   app.set('views', config.rootPath + '/server/views');
   app.set('view engine', 'jade');
-
+  app.use(cookieParser());
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
-
+  app.use(session({secret: 'jlab rocks'}));
+  app.use(passport.initialize());
+  app.use(passport.session());
   app.use(stylus.middleware(
   {
     src: config.rootPath + '/public',

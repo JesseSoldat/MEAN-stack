@@ -20,4 +20,20 @@ module.exports = function(config) {
 		console.log(mongoMessage);
 	});
 
+
+	var userSchema = mongoose.Schema({
+		firstName: String,
+		lastName: String,
+		userName: String
+	});
+
+	var User = mongoose.model('User', userSchema);
+	User.findOne({}).exec(function(err, collection){
+		console.log(collection);
+		if(collection.length === 0) {
+			User.create({firstName: 'Jesse', lastName: 'Soldat', userName: 'jsoldat'});
+		}
+		
+	});
+
 }
